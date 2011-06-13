@@ -27,29 +27,17 @@ module Bricks
     end
 
     def method_missing(name, *args, &block)
-      if name.to_s =~ /!$/
-        attr = name.to_s.chop
+      attr = (return_object = name.to_s =~ /!$/) ? name.to_s.chop : name
 
-        if respond_to?(attr)
-          send(attr, *args)
-        elsif @object.respond_to?("#{attr}=")
-          raise "More than 1 argument: #{args.inspect}" if args.size > 1
-          raise "Block and value given" if args.size > 0 && block_given?
-
-          @attrs[attr] = args.first || block
-        else
-          super
-        end
-
-        object
-      elsif @object.respond_to?("#{name}=")
-        raise "More than 1 argument: #{args.inspect}" if args.size > 1
-        raise "Block and value given" if args.size > 0 && block_given?
-
-        @attrs[name] = args.first || block
+      if respond_to?(attr)
+        send(attr, *args)
+      elsif settable?(attr)
+        set attr, *args, &block
       else
         super
       end
+
+      object if return_object
     end
 
     private
@@ -68,6 +56,16 @@ module Bricks
 
         @object.send "#{k}=", val
       }
+    end
+
+    def settable?(name)
+      @object.respond_to?("#{name}=")
+    end
+
+    def set(name, val = nil, &block)
+      raise "Block and value given" if val && block_given?
+
+      @attrs[name] = val || block
     end
   end
 end
