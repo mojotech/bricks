@@ -1,19 +1,19 @@
 module Bricks
   module DSL
     def build(klass)
-      builder(klass)
+      builder(klass).dup_as_builder
     end
 
     def build!(klass)
-      builder(klass).object
+      build(klass).object
     end
 
     def create(klass)
-      builder(klass)
+      builder(klass).dup_as_creator
     end
 
     def create!(klass)
-      builder(klass).object(true)
+      create(klass).object(true)
     end
 
     def builder(klass)

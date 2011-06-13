@@ -4,12 +4,23 @@ module Bricks
   class Builder
     include Bricks::DSL
 
-    def initialize(klass, &block)
+    def dup_as_builder
+      Builder.new(@class, @attrs, @traits)
+    end
+
+    def dup_as_creator
+      Builder.new(@class, @attrs, @traits)
+    end
+
+    def initialize(klass, attrs = {}, traits = Module.new, &block)
       @class  = klass
       @object = klass.new
-      @attrs  = {}
+      @attrs  = attrs
+      @traits = traits
 
-      instance_eval &block
+      extend @traits
+
+      instance_eval &block if block_given?
     end
 
     def object(save = false)
@@ -21,7 +32,7 @@ module Bricks
     end
 
     def trait(name, &block)
-      (class << self; self; end).class_eval do
+      @traits.class_eval do
         define_method name do
           block.call
 
