@@ -16,8 +16,33 @@ module Bricks
       @object
     end
 
+    def trait(name, &block)
+      (class << self; self; end).class_eval do
+        define_method name do
+          block.call
+
+          self
+        end
+      end
+    end
+
     def method_missing(name, *args, &block)
-      if @object.respond_to?("#{name}=")
+      if name.to_s =~ /!$/
+        attr = name.to_s.chop
+
+        if respond_to?(attr)
+          send(attr, *args)
+        elsif @object.respond_to?("#{attr}=")
+          raise "More than 1 argument: #{args.inspect}" if args.size > 1
+          raise "Block and value given" if args.size > 0 && block_given?
+
+          @attrs[attr] = args.first || block
+        else
+          super
+        end
+
+        object
+      elsif @object.respond_to?("#{name}=")
         raise "More than 1 argument: #{args.inspect}" if args.size > 1
         raise "Block and value given" if args.size > 0 && block_given?
 

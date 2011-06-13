@@ -6,9 +6,18 @@ describe Bricks do
   before :all do
     Bricks do
       plan Article do
-        title 'a title'
-        body  'the body'
+        author 'Jack Jupiter'
+        title  'a title'
+        body   'the body'
         deferred { Time.now }
+
+        trait :in_english do
+          language "English"
+        end
+
+        trait :by_jove do
+          author "Jack Jupiter"
+        end
       end
     end
   end
@@ -48,6 +57,27 @@ describe Bricks do
       a    = build!(Article)
 
       a.deferred.should > time
+    end
+  end
+
+  describe "with traits" do
+    it "returns the builder after calling the trait" do
+      build(Article).in_english.should be_kind_of(Bricks::Builder)
+    end
+
+    it "returns the object if the trait is called with a bang" do
+      build(Article).in_english!.should be_kind_of(Article)
+    end
+
+    it "initializes the model fields" do
+      build(Article).in_english!.language.should == "English"
+    end
+
+    it "combines multiple traits" do
+      a = build(Article).in_english.by_jove!
+
+      a.language.should == "English"
+      a.author.should   == "Jack Jupiter"
     end
   end
 end
