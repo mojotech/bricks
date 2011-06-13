@@ -8,6 +8,7 @@ describe Bricks do
       plan Article do
         title 'a title'
         body  'the body'
+        deferred { Time.now }
       end
     end
   end
@@ -32,6 +33,13 @@ describe Bricks do
 
       a.title.should == 'a title'
       a.body.should  == 'the body'
+    end
+
+    it "defers field initialization" do
+      time = Time.now
+      a    = build!(Article)
+
+      a.deferred.should > time
     end
   end
 end

@@ -1,5 +1,5 @@
 class Article
-  attr_accessor :title, :body
+  attr_accessor :title, :body, :deferred
 
   def initialize
     @saved = false
