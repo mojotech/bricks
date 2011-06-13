@@ -1,4 +1,6 @@
 class Article
+  attr_accessor :title, :body
+
   def initialize
     @saved = false
   end
