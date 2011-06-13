@@ -5,28 +5,29 @@ module Bricks
     include Bricks::DSL
 
     def dup_as_builder
-      Builder.new(@class, @attrs, @traits)
+      Builder.new(@class, @attrs, @traits, false)
     end
 
     def dup_as_creator
-      Builder.new(@class, @attrs, @traits)
+      Builder.new(@class, @attrs, @traits, true)
     end
 
-    def initialize(klass, attrs = {}, traits = Module.new, &block)
+    def initialize(klass, attrs = {}, traits = Module.new, save = false, &block)
       @class  = klass
       @object = klass.new
       @attrs  = attrs
       @traits = traits
+      @save   = save
 
       extend @traits
 
       instance_eval &block if block_given?
     end
 
-    def object(save = false)
+    def object
       populate_object
 
-      save_object if save
+      save_object if @save
 
       @object
     end

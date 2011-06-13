@@ -94,8 +94,18 @@ describe Bricks do
       build(Article).in_english.should be_kind_of(Bricks::Builder)
     end
 
-    it "returns the object if the trait is called with a bang" do
-      build(Article).in_english!.should be_kind_of(Article)
+    it "#build returns the object if the trait is called with a bang" do
+      a = build(Article).in_english!
+
+      a.should be_kind_of(Article)
+      a.should be_new_record
+    end
+
+    it "#create creates the object if the trait is called with a bang" do
+      a = create(Article).in_english!
+
+      a.should be_kind_of(Article)
+      a.should be_saved
     end
 
     it "initializes the model fields" do
