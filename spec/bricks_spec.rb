@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe Bricks do
-  include Bricks
+  include Bricks::DSL
 
   before :all do
     Bricks do

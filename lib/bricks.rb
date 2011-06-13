@@ -1,4 +1,5 @@
 require 'bricks/builder'
+require 'bricks/dsl'
 
 module Bricks
   class << self
@@ -8,7 +9,6 @@ module Bricks
   class Plan
     def initialize(&block)
       @plan = {}
-      instance_eval &block
     end
 
     def [](key)
@@ -19,28 +19,10 @@ module Bricks
       @plan[klass] = Bricks::Builder.new(klass, &block)
     end
   end
-
-  def build(klass)
-    builder(klass)
-  end
-
-  def build!(klass)
-    builder(klass).object
-  end
-
-  def create(klass)
-    builder(klass)
-  end
-
-  def create!(klass)
-    builder(klass).object(true)
-  end
-
-  def builder(klass)
-    Bricks.plan[klass]
-  end
 end
 
 def Bricks(&block)
-  Bricks::plan = Bricks::Plan.new(&block)
+  Bricks::plan = Bricks::Plan.new
+
+  Bricks::plan.instance_eval(&block)
 end
