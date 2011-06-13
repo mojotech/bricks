@@ -4,12 +4,37 @@ describe Bricks do
   include Bricks::DSL
 
   before :all do
+    # Dummy methods for associations
+    Bricks::Builder.class_eval do
+      def association?(name)
+        [:newspaper].include?(name.to_sym)
+      end
+
+      def association(name)
+        case name
+        when :newspaper
+          OpenStruct.new(:klass => Newspaper)
+        else
+          raise "Invalid name: #{name}."
+        end
+      end
+    end
+
     Bricks do
+      plan Newspaper do
+        name "The Daily Planet"
+
+        trait :daily_bugle do
+          name "The Daily Bugle"
+        end
+      end
+
       plan Article do
         author 'Jack Jupiter'
         title  'a title'
         body   'the body'
         deferred { Time.now }
+        newspaper
 
         trait :in_english do
           language "English"
@@ -17,6 +42,10 @@ describe Bricks do
 
         trait :by_jove do
           author "Jack Jupiter"
+        end
+
+        trait :on_the_bugle do
+          newspaper.daily_bugle
         end
       end
     end
@@ -78,6 +107,17 @@ describe Bricks do
 
       a.language.should == "English"
       a.author.should   == "Jack Jupiter"
+    end
+  end
+
+  describe "with a many-to-one association" do
+    it "initializes an association with the default values" do
+      build!(Article).newspaper.name.should == 'The Daily Planet'
+    end
+
+    it "overrides the association" do
+      build(Article).on_the_bugle!.newspaper.name.
+        should == 'The Daily Bugle'
     end
   end
 end

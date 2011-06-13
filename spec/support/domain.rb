@@ -1,5 +1,5 @@
 class Article
-  attr_accessor :author, :title, :body, :deferred, :language
+  attr_accessor :author, :title, :body, :deferred, :language, :newspaper
 
   def initialize
     @saved = false
@@ -16,4 +16,8 @@ class Article
   def saved?
     @saved
   end
+end
+
+class Newspaper
+  attr_accessor :name
 end
