@@ -20,8 +20,16 @@ module Bricks
     end
   end
 
+  def build(klass)
+    builder(klass)
+  end
+
   def build!(klass)
     builder(klass).object
+  end
+
+  def create(klass)
+    builder(klass)
   end
 
   def create!(klass)

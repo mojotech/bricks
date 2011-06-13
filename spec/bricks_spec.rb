@@ -13,6 +13,14 @@ describe Bricks do
     end
   end
 
+  it "#build returns the constructor" do
+    build(Article).should be_kind_of(Bricks::Builder)
+  end
+
+  it "#create returns the constructor" do
+    create(Article).should be_kind_of(Bricks::Builder)
+  end
+
   it "initializes a model" do
     a = build!(Article)
 
