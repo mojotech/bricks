@@ -17,7 +17,7 @@ module Bricks
     end
 
     def builder(klass)
-      Bricks.plan[klass]
+      Bricks.builders[klass]
     end
   end
 end

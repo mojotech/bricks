@@ -21,7 +21,7 @@ describe Bricks do
     end
 
     Bricks do
-      plan Newspaper do
+      builder Newspaper do
         name "The Daily Planet"
 
         trait :daily_bugle do
@@ -29,7 +29,7 @@ describe Bricks do
         end
       end
 
-      plan Article do
+      builder Article do
         author 'Jack Jupiter'
         title  'a title'
         body   'the body'

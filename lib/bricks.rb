@@ -3,26 +3,26 @@ require 'bricks/dsl'
 
 module Bricks
   class << self
-    attr_accessor :plan
+    attr_accessor :builders
   end
 
-  class Plan
+  class BuilderHashSet
     def initialize(&block)
-      @plan = {}
+      @builders = {}
     end
 
     def [](key)
-      @plan[key]
+      @builders[key]
     end
 
-    def plan(klass, &block)
-      @plan[klass] = Bricks::Builder.new(klass, &block)
+    def builder(klass, &block)
+      @builders[klass] = Bricks::Builder.new(klass, &block)
     end
   end
 end
 
 def Bricks(&block)
-  Bricks::plan = Bricks::Plan.new
+  Bricks::builders = Bricks::BuilderHashSet.new
 
-  Bricks::plan.instance_eval(&block)
+  Bricks::builders.instance_eval(&block)
 end
