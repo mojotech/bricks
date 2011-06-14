@@ -99,7 +99,6 @@ module Bricks
       elsif association?(name)
         @attrs[name] = build(association(name).klass)
       else
-        puts [@klass, name, val].inspect
         raise "No value or block given and not an association: #{name}."
       end
     end
