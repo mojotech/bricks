@@ -4,12 +4,16 @@ module Bricks
   class Builder
     include Bricks::DSL
 
+    def derive(klass = @class, save = @save)
+      Builder.new(klass, @attrs, @traits, save)
+    end
+
     def dup_as_builder
-      Builder.new(@class, @attrs, @traits, false)
+      derive(@class, false)
     end
 
     def dup_as_creator
-      Builder.new(@class, @attrs, @traits, true)
+      derive(@class, true)
     end
 
     def initialize(klass, attrs = {}, traits = Module.new, save = false, &block)
