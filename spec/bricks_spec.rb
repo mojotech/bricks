@@ -21,6 +21,10 @@ describe Bricks do
     end
 
     Bricks do
+      builder PrintMedium do
+        start_date Date.new(1900, 1, 1)
+      end
+
       builder Newspaper do
         name "The Daily Planet"
 
@@ -128,6 +132,15 @@ describe Bricks do
     it "overrides the association" do
       build(Article).on_the_bugle!.newspaper.name.
         should == 'The Daily Bugle'
+    end
+  end
+
+  describe "builder inheritance" do
+    it "uses the parent's builder if the model has none" do
+      mag = build!(Magazine)
+
+      mag.should be_a(Magazine)
+      mag.start_date.should == Date.new(1900, 1, 1)
     end
   end
 end

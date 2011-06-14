@@ -1,3 +1,5 @@
+require 'date'
+
 class Article
   attr_accessor :author, :title, :body, :deferred, :language, :newspaper
 
@@ -18,6 +20,14 @@ class Article
   end
 end
 
+class PrintMedium
+  attr_accessor :start_date
+end
+
+class Magazine < PrintMedium
+end
+
 class Newspaper
   attr_accessor :name
 end
+
