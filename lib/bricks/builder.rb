@@ -19,8 +19,8 @@ module Bricks
     def initialize(klass, attrs = {}, traits = Module.new, save = false, &block)
       @class  = klass
       @object = klass.new
-      @attrs  = attrs
-      @traits = traits
+      @attrs  = deep_copy(attrs)
+      @traits = Module.new { include traits }
       @save   = save
 
       extend @traits
@@ -38,8 +38,10 @@ module Bricks
 
     def trait(name, &block)
       @traits.class_eval do
-        define_method name do
-          block.call
+        define_method "__#{name}", &block
+
+        define_method name do |*args|
+          send "__#{name}", *args
 
           self
         end
@@ -65,6 +67,12 @@ module Bricks
     end
 
     private
+
+    def deep_copy(attrs)
+      attrs.inject({}) { |a, (k, v)|
+        a.tap { a[k] = Builder === v ? v.derive : v }
+      }
+    end
 
     def save_object
       @object.save!
