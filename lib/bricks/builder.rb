@@ -37,7 +37,7 @@ module Bricks
 
     def initialize(klass, attrs = nil, traits = nil, save = false, &block)
       @class  = klass
-      @attrs  = attrs ? deep_copy(attrs) : {}
+      @attrs  = attrs ? deep_copy(attrs) : []
       @traits = traits ? Module.new { include traits } : Module.new
       @save   = save
 
@@ -96,8 +96,8 @@ module Bricks
     end
 
     def deep_copy(attrs)
-      attrs.inject({}) { |a, (k, v)|
-        a.tap { a[k] = Builder === v ? v.derive : v }
+      attrs.inject([]) { |a, (k, v)|
+        a.tap { a << [k, Builder === v ? v.derive : v] }
       }
     end
 
@@ -108,7 +108,7 @@ module Bricks
     def initialize_object
       obj = @class.new
 
-      @attrs.each { |k, v|
+      @attrs.each { |(k, v)|
         val = case v
               when Proc
                 v.call *[obj].take([v.arity, 0].max)
@@ -131,14 +131,16 @@ module Bricks
     def set(name, val = nil, &block)
       raise Bricks::BadSyntax, "Block and value given" if val && block_given?
 
+      pair = @attrs.assoc(name) || (@attrs << [name, nil]).last
+
       if block_given?
-        @attrs[name] = block
+        pair[-1] = block
       elsif val
-        @attrs[name] = val
+        pair[-1] = val
       elsif adapter.association?(@class, name, :one)
-        @attrs[name] = create(adapter.association(@class, name).klass)
+        pair[-1] = create(adapter.association(@class, name).klass)
       elsif adapter.association?(@class, name, :many)
-        @attrs[name] ||= BuilderSet.new(adapter.association(@class, name).klass)
+        pair[-1] ||= BuilderSet.new(adapter.association(@class, name).klass)
       else
         raise Bricks::BadSyntax,
               "No value or block given and not an association: #{name}."
