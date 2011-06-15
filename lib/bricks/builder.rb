@@ -13,6 +13,12 @@ module Bricks
       @@adapter = adapter
     end
 
+    def ~@()
+      @search = true
+
+      self
+    end
+
     def derive(klass = @class, save = @save)
       Builder.new(klass, @attrs, @traits, save)
     end
@@ -40,7 +46,8 @@ module Bricks
     def object
       populate_object
 
-      save_object if @save
+      @object = adapter.find(@class, @object) || @object if @search
+      save_object                                        if @save
 
       @object
     end

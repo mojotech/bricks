@@ -34,6 +34,10 @@ describe Bricks do
           author "Jack Jupiter"
         end
 
+        trait :maybe_bugle do
+          ~newspaper.daily_bugle
+        end
+
         trait :on_the_bugle do
           newspaper.daily_bugle
         end
@@ -131,6 +135,20 @@ describe Bricks do
     it "overrides the association" do
       build(Article).on_the_bugle!.newspaper.name.
         should == 'The Daily Bugle'
+    end
+
+    it "possibly looks for an existing record" do
+      n = create(Newspaper).daily_bugle!
+      a = create(Article).maybe_bugle!
+
+      a.newspaper.should == n
+    end
+
+    it "possibly looks for an existing record (and finds none)" do
+      a = create(Article).maybe_bugle!
+
+      a.newspaper.should_not be_new_record
+      a.newspaper.name.should == "The Daily Bugle"
     end
   end
 

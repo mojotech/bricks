@@ -32,6 +32,10 @@ module Bricks
         a if type.nil? || a.type == type
       end
 
+      def find(klass, obj)
+        klass.find(:first, :conditions => obj.attributes)
+      end
+
       Bricks::Builder.adapter = self.new
     end
   end
