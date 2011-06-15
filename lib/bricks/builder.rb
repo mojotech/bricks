@@ -125,7 +125,7 @@ module Bricks
       elsif val
         @attrs[name] = val
       elsif adapter.association?(@class, name, :one)
-        @attrs[name] = build(adapter.association(@class, name).klass)
+        @attrs[name] = create(adapter.association(@class, name).klass)
       elsif adapter.association?(@class, name, :many)
         @attrs[name] ||= BuilderSet.new(adapter.association(@class, name).klass)
       else
