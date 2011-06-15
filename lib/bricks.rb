@@ -10,6 +10,8 @@ module Bricks
     end
   end
 
+  class NoAttributeOrTrait < StandardError; end
+
   class BuilderHashSet
     def initialize(&block)
       @builders = {}

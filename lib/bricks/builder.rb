@@ -72,7 +72,7 @@ module Bricks
                elsif settable?(attr)
                  set attr, *args, &block
                else
-                 super
+                 raise Bricks::NoAttributeOrTrait, "Can't find `#{name}'."
                end
 
       if return_object
