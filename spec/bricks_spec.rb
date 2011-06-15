@@ -155,6 +155,10 @@ describe Bricks do
       mag.should be_a(Magazine)
       mag.start_date.should == Date.new(1900, 1, 1)
     end
+
+    it "creates a builder for models that don't have one" do
+      build!(Reader).should be_a(Reader)
+    end
   end
 end
 
