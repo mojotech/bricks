@@ -3,7 +3,7 @@ require 'active_record'
 
 module Bricks
   module Adapters
-    module ActiveRecord
+    class ActiveRecord
       class Association
         attr_reader :type
 
@@ -21,18 +21,18 @@ module Bricks
         end
       end
 
-      def association?(name, type = nil)
-        association(name, type)
+      def association?(klass, name, type = nil)
+        association(klass, name, type)
       end
 
-      def association(name, type = nil)
-        ar = @class.reflect_on_association(name.to_sym)
+      def association(klass, name, type = nil)
+        ar = klass.reflect_on_association(name.to_sym)
         a  = Association.new(ar.klass, ar.macro)
 
         a if type.nil? || a.type == type
       end
 
-      Bricks::Builder.send(:include, self)
+      Bricks::Builder.adapter = self.new
     end
   end
 end

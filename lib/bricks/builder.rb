@@ -5,6 +5,14 @@ module Bricks
   class Builder
     include Bricks::DSL
 
+    def self.adapter
+      @@adapter
+    end
+
+    def self.adapter=(adapter)
+      @@adapter = adapter
+    end
+
     def derive(klass = @class, save = @save)
       Builder.new(klass, @attrs, @traits, save)
     end
@@ -69,6 +77,10 @@ module Bricks
 
     private
 
+    def adapter
+      Builder.adapter
+    end
+
     def deep_copy(attrs)
       attrs.inject({}) { |a, (k, v)|
         a.tap { a[k] = Builder === v ? v.derive : v }
@@ -105,10 +117,10 @@ module Bricks
         @attrs[name] = block
       elsif val
         @attrs[name] = val
-      elsif association?(name, :one)
-        @attrs[name] = build(association(name).klass)
-      elsif association?(name, :many)
-        @attrs[name] ||= BuilderSet.new(association(name).klass)
+      elsif adapter.association?(@class, name, :one)
+        @attrs[name] = build(adapter.association(@class, name).klass)
+      elsif adapter.association?(@class, name, :many)
+        @attrs[name] ||= BuilderSet.new(adapter.association(@class, name).klass)
       else
         raise "No value or block given and not an association: #{name}."
       end

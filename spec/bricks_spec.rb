@@ -4,28 +4,7 @@ describe Bricks do
   include Bricks::DSL
 
   before :all do
-    # Dummy methods for associations
-    Bricks::Builder.class_eval do
-      def associations
-        @associations ||= {
-          :newspaper => {:klass => Newspaper, :type => :one},
-          :readers   => {:klass => Reader,    :type => :many}
-        }
-      end
-
-      def association?(name, type = nil)
-        associations[name] &&
-          (type.nil? || associations[name][:type] == type)
-      end
-
-      def association(name)
-        if association?(name)
-          OpenStruct.new(associations[name])
-        else
-          raise "Invalid name: #{name}."
-        end
-      end
-    end
+    Bricks::Builder.adapter = TestAdapter.new
 
     Bricks do
       builder PrintMedium do
