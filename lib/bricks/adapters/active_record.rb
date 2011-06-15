@@ -26,10 +26,11 @@ module Bricks
       end
 
       def association(klass, name, type = nil)
-        ar = klass.reflect_on_association(name.to_sym)
-        a  = Association.new(ar.klass, ar.macro)
+        if ar = klass.reflect_on_association(name.to_sym)
+          a  = Association.new(ar.klass, ar.macro)
 
-        a if type.nil? || a.type == type
+          a if type.nil? || a.type == type
+        end
       end
 
       def find(klass, obj)
