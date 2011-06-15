@@ -3,7 +3,11 @@ require 'bricks/dsl'
 
 module Bricks
   class << self
-    attr_accessor :builders
+    attr_writer :builders
+
+    def builders
+      @builders ||= BuilderHashSet.new
+    end
   end
 
   class BuilderHashSet
