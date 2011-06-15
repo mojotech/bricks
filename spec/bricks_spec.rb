@@ -6,14 +6,21 @@ describe Bricks do
   before :all do
     # Dummy methods for associations
     Bricks::Builder.class_eval do
-      def association?(name)
-        [:newspaper].include?(name.to_sym)
+      def associations
+        @associations ||= {
+          :newspaper => {:klass => Newspaper, :type => :one},
+          :readers   => {:klass => Reader,    :type => :many}
+        }
+      end
+
+      def association?(name, type = nil)
+        associations[name] &&
+          (type.nil? || associations[name][:type] == type)
       end
 
       def association(name)
-        case name
-        when :newspaper
-          OpenStruct.new(:klass => Newspaper)
+        if association?(name)
+          OpenStruct.new(associations[name])
         else
           raise "Invalid name: #{name}."
         end
@@ -40,6 +47,8 @@ describe Bricks do
         deferred { Time.now }
         newspaper
 
+        %w(Socrates Plato Aristotle).each { |n| readers.name(n) }
+
         trait :in_english do
           language "English"
         end
@@ -50,6 +59,12 @@ describe Bricks do
 
         trait :on_the_bugle do
           newspaper.daily_bugle
+        end
+
+        trait :with_alternative_readers do
+          readers.clear
+
+          %w(Tom Dick Harry).each { |n| readers.name(n) }
         end
       end
     end
@@ -132,6 +147,20 @@ describe Bricks do
     it "overrides the association" do
       build(Article).on_the_bugle!.newspaper.name.
         should == 'The Daily Bugle'
+    end
+  end
+
+  describe "with a one-to-many association" do
+    it "initializes an association with the default values" do
+      build!(Article).readers.map { |r|
+        r.name
+      }.should == %w(Socrates Plato Aristotle)
+    end
+
+    it "overrides the association" do
+      build(Article).with_alternative_readers!.readers.map { |r|
+        r.name
+      }.should == %w(Tom Dick Harry)
     end
   end
 

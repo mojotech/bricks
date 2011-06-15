@@ -1,7 +1,8 @@
 require 'date'
 
 class Article
-  attr_accessor :author, :title, :body, :deferred, :language, :newspaper
+  attr_accessor :author, :title, :body, :deferred, :language, :newspaper,
+                :readers
 
   def initialize
     @saved = false
@@ -31,3 +32,6 @@ class Newspaper
   attr_accessor :name
 end
 
+class Reader
+  attr_accessor :name
+end

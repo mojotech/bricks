@@ -1,4 +1,5 @@
 require 'bricks/dsl'
+require 'bricks/builder_set'
 
 module Bricks
   class Builder
@@ -83,7 +84,7 @@ module Bricks
         val = case v
               when Proc
                 v.call
-              when Builder
+              when Builder, BuilderSet
                 v.object
               else
                 v
@@ -104,8 +105,10 @@ module Bricks
         @attrs[name] = block
       elsif val
         @attrs[name] = val
-      elsif association?(name)
+      elsif association?(name, :one)
         @attrs[name] = build(association(name).klass)
+      elsif association?(name, :many)
+        @attrs[name] ||= BuilderSet.new(association(name).klass)
       else
         raise "No value or block given and not an association: #{name}."
       end
