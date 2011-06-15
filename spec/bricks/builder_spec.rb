@@ -32,4 +32,10 @@ describe Bricks::Builder do
       Bricks::Builder.new(Person).name
     }.should raise_error(Bricks::BadSyntax)
   end
+
+  it "always generates a new object" do
+    b = Bricks::Builder.new(Person)
+
+    b.generate.object_id.should_not == b.generate.object_id
+  end
 end
