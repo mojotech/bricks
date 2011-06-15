@@ -5,7 +5,7 @@ module Bricks
     end
 
     def build!(klass)
-      build(klass).object
+      build(klass).generate
     end
 
     def create(klass)
@@ -13,7 +13,7 @@ module Bricks
     end
 
     def create!(klass)
-      create(klass).object
+      create(klass).generate
     end
 
     def builder(klass)

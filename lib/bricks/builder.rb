@@ -46,7 +46,7 @@ module Bricks
       instance_eval &block if block_given?
     end
 
-    def object
+    def generate
       obj = initialize_object
 
       obj = adapter.find(@class, obj) || obj if @search
@@ -79,7 +79,7 @@ module Bricks
                end
 
       if return_object
-        object
+        generate
       else
         result
       end
@@ -113,7 +113,7 @@ module Bricks
               when Proc
                 v.call *[obj].take([v.arity, 0].max)
               when Builder, BuilderSet
-                v.object
+                v.generate
               else
                 v
               end
