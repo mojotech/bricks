@@ -4,6 +4,8 @@ describe Bricks do
   include Bricks::DSL
 
   before :all do
+    Bricks::Builder.adapter = Bricks::Adapters::ActiveRecord.new
+
     Bricks do
       builder PrintMedium do
         start_date Date.new(1900, 1, 1)

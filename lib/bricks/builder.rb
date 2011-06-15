@@ -129,7 +129,8 @@ module Bricks
       elsif adapter.association?(@class, name, :many)
         @attrs[name] ||= BuilderSet.new(adapter.association(@class, name).klass)
       else
-        raise "No value or block given and not an association: #{name}."
+        raise Bricks::BadSyntax,
+              "No value or block given and not an association: #{name}."
       end
     end
   end

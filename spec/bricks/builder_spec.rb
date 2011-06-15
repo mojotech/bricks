@@ -2,6 +2,14 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Bricks::Builder do
   before :all do
+    Bricks::Builder.adapter = Class.new {
+      def association(*args)
+        nil
+      end
+
+      alias_method :association?, :association
+    }.new
+
     class Person
       attr_accessor :name
     end
@@ -19,4 +27,9 @@ describe Bricks::Builder do
     }.should raise_error(Bricks::BadSyntax)
   end
 
+  it "forbids passing no value or block to a non-association attribute" do
+    lambda {
+      Bricks::Builder.new(Person).name
+    }.should raise_error(Bricks::BadSyntax)
+  end
 end
