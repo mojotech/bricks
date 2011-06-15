@@ -118,7 +118,7 @@ module Bricks
     end
 
     def set(name, val = nil, &block)
-      raise "Block and value given" if val && block_given?
+      raise Bricks::BadSyntax, "Block and value given" if val && block_given?
 
       if block_given?
         @attrs[name] = block

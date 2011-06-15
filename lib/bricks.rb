@@ -11,6 +11,7 @@ module Bricks
   end
 
   class NoAttributeOrTrait < StandardError; end
+  class BadSyntax < StandardError; end
 
   class BuilderHashSet
     def initialize(&block)

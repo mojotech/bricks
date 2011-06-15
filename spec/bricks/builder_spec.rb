@@ -12,4 +12,11 @@ describe Bricks::Builder do
       Bricks::Builder.new(Person).birth_date(Date.new(1978, 5, 3))
     }.should raise_error(Bricks::NoAttributeOrTrait)
   end
+
+  it "forbids passing a block and an initial value" do
+    lambda {
+      Bricks::Builder.new(Person).name("Jack") { "heh" }
+    }.should raise_error(Bricks::BadSyntax)
+  end
+
 end
