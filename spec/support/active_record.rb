@@ -13,6 +13,7 @@ ActiveRecord::Schema.define(:version => 20110608204150) do
     t.string   "author"
     t.string   "body"
     t.datetime "deferred"
+    t.string   "formatted_title"
     t.string   "language"
     t.integer  "newspaper_id"
     t.string   "title"

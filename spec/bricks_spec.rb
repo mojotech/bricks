@@ -21,6 +21,7 @@ describe Bricks do
         author 'Jack Jupiter'
         title  'a title'
         body   'the body'
+        formatted_title { |obj| obj.title + " by " + obj.author }
         deferred { Time.now }
         newspaper
 
@@ -93,6 +94,10 @@ describe Bricks do
       a    = build!(Article)
 
       a.deferred.should > time
+    end
+
+    it "uses the object being built in deferred initialization" do
+      build!(Article).formatted_title.should == "a title by Jack Jupiter"
     end
   end
 

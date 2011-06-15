@@ -102,7 +102,7 @@ module Bricks
       @attrs.each { |k, v|
         val = case v
               when Proc
-                v.call
+                v.call *[@object].take([v.arity, 0].max)
               when Builder, BuilderSet
                 v.object
               else
