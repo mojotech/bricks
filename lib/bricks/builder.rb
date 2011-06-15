@@ -25,11 +25,11 @@ module Bricks
       derive(@class, true)
     end
 
-    def initialize(klass, attrs = {}, traits = Module.new, save = false, &block)
+    def initialize(klass, attrs = nil, traits = nil, save = false, &block)
       @class  = klass
       @object = klass.new
-      @attrs  = deep_copy(attrs)
-      @traits = Module.new { include traits }
+      @attrs  = attrs ? deep_copy(attrs) : {}
+      @traits = traits ? Module.new { include traits } : Module.new
       @save   = save
 
       extend @traits
