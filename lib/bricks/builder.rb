@@ -13,6 +13,10 @@ module Bricks
       @@adapter = adapter
     end
 
+    def self.instances
+      @@instances ||= {}
+    end
+
     def ~@()
       @search = true
 
@@ -33,7 +37,6 @@ module Bricks
 
     def initialize(klass, attrs = nil, traits = nil, save = false, &block)
       @class  = klass
-      @object = klass.new
       @attrs  = attrs ? deep_copy(attrs) : {}
       @traits = traits ? Module.new { include traits } : Module.new
       @save   = save
@@ -44,6 +47,8 @@ module Bricks
     end
 
     def object
+      @object = @class.new
+
       populate_object
 
       @object = adapter.find(@class, @object) || @object if @search
@@ -84,6 +89,10 @@ module Bricks
 
     private
 
+    def subject
+      Builder.instances[@class] ||= @class.new
+    end
+
     def adapter
       Builder.adapter
     end
@@ -114,7 +123,7 @@ module Bricks
     end
 
     def settable?(name)
-      @object.respond_to?("#{name}=")
+      subject.respond_to?("#{name}=")
     end
 
     def set(name, val = nil, &block)
