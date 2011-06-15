@@ -47,14 +47,12 @@ module Bricks
     end
 
     def object
-      @object = @class.new
+      obj = initialize_object
 
-      populate_object
+      obj = adapter.find(@class, obj) || obj if @search
+      save_object(obj)                       if @save
 
-      @object = adapter.find(@class, @object) || @object if @search
-      save_object                                        if @save
-
-      @object
+      obj
     end
 
     def trait(name, &block)
@@ -103,23 +101,27 @@ module Bricks
       }
     end
 
-    def save_object
-      @object.save!
+    def save_object(obj)
+      obj.save!
     end
 
-    def populate_object
+    def initialize_object
+      obj = @class.new
+
       @attrs.each { |k, v|
         val = case v
               when Proc
-                v.call *[@object].take([v.arity, 0].max)
+                v.call *[obj].take([v.arity, 0].max)
               when Builder, BuilderSet
                 v.object
               else
                 v
               end
 
-        @object.send "#{k}=", val
+        obj.send "#{k}=", val
       }
+
+      obj
     end
 
     def settable?(name)
