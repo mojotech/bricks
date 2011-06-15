@@ -15,7 +15,11 @@ module Bricks
       if @builders[key]
         @builders[key]
       elsif Class === key
-        builder = self[key.superclass] and @builders[key] = builder.derive(key)
+        @builders[key] = if builder = @builders[key.superclass]
+                           builder.derive(key)
+                         else
+                           builder(key)
+                         end
       end
     end
 
