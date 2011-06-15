@@ -4,8 +4,6 @@ describe Bricks do
   include Bricks::DSL
 
   before :all do
-    Bricks::Builder.adapter = TestAdapter.new
-
     Bricks do
       builder PrintMedium do
         start_date Date.new(1900, 1, 1)
@@ -47,6 +45,13 @@ describe Bricks do
         end
       end
     end
+  end
+
+  after do
+    Reader.delete_all
+    Article.delete_all
+    PrintMedium.delete_all
+    Newspaper.delete_all
   end
 
   it "#build returns the constructor" do
