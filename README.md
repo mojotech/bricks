@@ -1,12 +1,12 @@
 Bricks
 ======
 
-Bricks is a hybrid Object Builder/Factory implementation. It aims to be a more flexible alternative to the existing Object Factory solutions while retaining as much simplicity as possible.
+*Bricks* is a hybrid Object Builder/Factory implementation. It aims to be a more flexible alternative to the existing Object Factory solutions while remaining as simple as possible.
 
 Usage
 -----
 
-Let's assume you have the following class:
+We'll use the following domain to describe *Brick's* features:
 
     # Only ActiveRecord objects are supported right now.
 
@@ -41,7 +41,7 @@ Let's assume you have the following class:
 
     # == Schema Information
     #
-    # Table name: publications
+    # Table name: readers
     #
     #  id         :integer(4)      not null, primary key
     #  name       :string(255)
@@ -50,7 +50,7 @@ Let's assume you have the following class:
     class Reader < ActiveRecord::Base
     end
 
-At its simplest, you can start using Bricks without declaring any builder (*note:* it gets less verbose).
+At its simplest, you can start using *Bricks* without declaring any builder (*note:* it gets less verbose).
 
     article_builder = build(Article)
 
@@ -62,11 +62,11 @@ This will give you a builder for the Article class, which you can then use to bu
 
 Contrary to the original pattern, builders are stateful (i.e., you don't get a new builder every time you call a method on the current builder).
 
-You can get the underlying instance by calling _#generate_.
+You can get the underlying instance by calling `#generate`.
 
     article = article_builder.generate
 
-This will initialize an Article with the attributes you passed the builder. If, instead of initializing, you'd prefer the record to be created right away, use _#create_ instead.
+This will initialize an Article with the attributes you passed the builder. If, instead of initializing, you'd prefer the record to be created right away, use `#create` instead.
 
 If you don't really care about the builder and just want the underlying instance you can instead use.
 
@@ -81,7 +81,7 @@ When you want to use the default builder, without customizing it any further, yo
 
 ### Building builders
 
-Of course, using builders like described above isn't of much use. Let's create a builder for _Article_:
+Of course, using builders like described above isn't of much use. Let's create a builder for `Article`:
 
     Bricks do
       builder Article do
@@ -113,7 +113,7 @@ You can get at the underlying instance from deferred blocks:
 
 ### Associations
 
-Bricks supports setting association records.
+*Bricks* supports setting association records.
 
 #### Many-to-one (belongs to)
 
@@ -133,7 +133,7 @@ You can also customize the association builder instance:
 
     builder Article do
       # ...
-      publication.name("The Caribeeaneer")
+      publication.name("The Caribeaneer")
     end
 
 If you prepend a "~" to the association declaration, the record will be initialized/created *only* if a record with the given attributes doesn't exist yet:
@@ -171,7 +171,8 @@ Given the builder:
 you can do something like:
 
     np = build!(Newspaper)
-    np.name # => "The Caribbean Times"
+    np.class # => Newspaper
+    np.name  # => "The Caribbean Times"
 
 ### Traits
 
@@ -192,7 +193,7 @@ The real power of the Builder pattern comes from the use of traits. Instead of d
 
 Use it like this:
 
-    build(Article).alternative_publication("The Caribeaneer").by_elaine
+    article = build(Article).alternative_publication("The Caribeaneer").by_elaine!
 
 Note that if you want to override a *-to-many association inside a trait, you need to clear it first:
 
