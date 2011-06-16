@@ -44,14 +44,6 @@ module Bricks
       Builder.new(klass, @attrs, @traits, save)
     end
 
-    def dup_as_builder
-      derive(@class, false)
-    end
-
-    def dup_as_creator
-      derive(@class, true)
-    end
-
     def initialize(klass, attrs = nil, traits = nil, save = false, &block)
       @class  = klass
       @attrs  = attrs ? deep_copy(attrs) : []
