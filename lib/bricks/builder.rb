@@ -23,7 +23,24 @@ module Bricks
       self
     end
 
-    def derive(klass = @class, save = @save)
+    def derive(*args)
+      klass, save = case args.size
+                    when 2
+                      args
+                    when 1
+                      case args.first
+                      when Class
+                        [args.first, @save]
+                      else
+                        [@class, args.first]
+                      end
+                    when 0
+                      [@class, @save]
+                    else
+                      raise ArgumentError, "wrong number of arguments " +
+                                              "(#{args.size} for 0, 1 or 2)"
+                    end
+
       Builder.new(klass, @attrs, @traits, save)
     end
 
