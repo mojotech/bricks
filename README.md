@@ -215,6 +215,30 @@ Note that if you want to override a *-to-many association inside a trait, you ne
 
 For an executable version of this documentation, please see spec/bricks_spec.rb.
 
+Installation
+------------
+
+### Rails 2
+
+Add `config.gem "bricks"` to `environments/test.rb` or, as a rails plugin:
+
+    $ script/plugin install git://github.com/mojotech/bricks.git # Rails 2
+
+### Rails 3
+
+Add `gem "bricks"` to your `Gemfile`, or, as a rails plugin:
+
+    $ rails plugin install git://github.com/mojotech/bricks.git # Rails 3
+
+### RSpec
+
+    # you only need to add the following line if you're using the gem
+    require 'bricks/adapters/active_record'
+
+    # put this inside RSpec's configure block to get access to
+    # #build, #build!, #create and #create! in your specs
+    config.include Bricks::DSL
+
 Copyright
 ---------
 
