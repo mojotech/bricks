@@ -147,7 +147,7 @@ module Bricks
       elsif val
         pair[-1] = val
       elsif adapter.association?(@class, name, :one)
-        pair[-1] = create(adapter.association(@class, name).klass)
+        pair[-1] = builder(adapter.association(@class, name).klass, @save)
       elsif adapter.association?(@class, name, :many)
         pair[-1] ||= BuilderSet.new(adapter.association(@class, name).klass)
       else
