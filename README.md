@@ -230,7 +230,7 @@ Add `gem "bricks"` to your `Gemfile`, or, as a rails plugin:
 
     $ rails plugin install git://github.com/mojotech/bricks.git # Rails 3
 
-### RSpec
+### RSpec [TODO: add instructions for other frameworks]
 
     # you only need to add the following line if you're using the gem
     require 'bricks/adapters/active_record'
@@ -238,6 +238,8 @@ Add `gem "bricks"` to your `Gemfile`, or, as a rails plugin:
     # put this inside RSpec's configure block to get access to
     # #build, #build!, #create and #create! in your specs
     config.include Bricks::DSL
+
+Finally, add a file to spec/support containing your builders. Call it whatever you'd like and make sure it gets loaded (rspec usually loads all .rb files under spec/support).
 
 Copyright
 ---------
