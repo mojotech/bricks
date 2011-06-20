@@ -17,7 +17,7 @@ module Bricks
     end
 
     def builder(klass, save)
-      Bricks.builders[klass].derive(save)
+      Bricks.builders[klass].derive(:save => save)
     end
   end
 end
