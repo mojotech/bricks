@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(:version => 20110608204150) do
   end
 
   create_table "newspapers", :force => true do |t|
+    t.string   "language"
     t.string   "name"
   end
 

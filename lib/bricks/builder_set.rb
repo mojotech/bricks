@@ -33,8 +33,8 @@ module Bricks
       build(@class).send(name, *args)
     end
 
-    def generate
-      @builders.map { |b| b.generate }
+    def generate(parent = nil)
+      @builders.map { |b| b.generate(parent) }
     end
   end
 end

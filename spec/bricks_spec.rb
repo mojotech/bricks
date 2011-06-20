@@ -20,12 +20,14 @@ describe Bricks do
       end
 
       builder Article do
-        author 'Jack Jupiter'
-        title  'a title'
-        body   'the body'
+        author   'Jack Jupiter'
+        title    'a title'
+        body     'the body'
+        language 'Swahili'
+
         formatted_title { |obj| obj.title + " by " + obj.author }
         deferred { Time.now }
-        newspaper
+        newspaper.language { |_, article| article.language }
 
         %w(Socrates Plato Aristotle).each { |n| readers.name(n) }
 
@@ -142,6 +144,10 @@ describe Bricks do
     it "overrides the association" do
       build(Article).on_the_bugle!.newspaper.name.
         should == 'The Daily Bugle'
+    end
+
+    it "passes the parent into a deferred block" do
+      build(Article).language!("Thai").newspaper.language.should == "Thai"
     end
 
     it "possibly looks for an existing record" do

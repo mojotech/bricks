@@ -160,6 +160,16 @@ Each call to the *-to-many association name will add a new builder, which you ca
 
 (Note that you don't use "!" here. That's only when building the records in your tests.)
 
+### Passing the parent to association builder blocks
+
+If you need access to the parent object when building an associated object, you'll find it as the second argument passed to a deferred block.
+
+    builder Article do
+      # ...
+
+      publication.name { |_, article| "#{article.title}'s publication" }
+    end
+
 ### Builder Inheritance
 
 Given the builder:

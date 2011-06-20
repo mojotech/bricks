@@ -41,8 +41,8 @@ module Bricks
       instance_eval &block if block_given?
     end
 
-    def generate
-      obj = initialize_object
+    def generate(parent = nil)
+      obj = initialize_object(parent)
 
       obj = adapter.find(@class, obj) || obj if @search
       save_object(obj)                       if @save
@@ -100,15 +100,15 @@ module Bricks
       obj.save!
     end
 
-    def initialize_object
+    def initialize_object(parent)
       obj = @class.new
 
       @attrs.each { |(k, v)|
         val = case v
               when Proc
-                v.call *[obj].take([v.arity, 0].max)
+                v.call *[obj, parent].take([v.arity, 0].max)
               when Builder, BuilderSet
-                v.generate
+                v.generate(obj)
               else
                 v
               end
