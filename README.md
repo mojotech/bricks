@@ -143,6 +143,16 @@ If you prepend a "~" to the association declaration, the record will be initiali
       ~publication # will search for a record with name "The Caribbean Times"
     end
 
+The same effect can be achieved in your tests using
+
+    ~(build(Publication)).name!("The Daily Bugle")
+
+but since this is ugly, you can just use `?` instead of `!` and you'll get (almost) the same effect:
+
+    build(Publication).name?("The Daily Bugle")
+
+There is a slight difference between using `~` and `?`. `~` will permanently change the builder, while `?` will enable searching only when it's used.
+
 #### One-to-many, Many-to-many (has many, has and belongs to many)
 
     Bricks do

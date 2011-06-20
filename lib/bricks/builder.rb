@@ -24,27 +24,37 @@ module Bricks
     end
 
     def derive(args = {})
-      klass = args[:class] || @class
-      save  = args.has_key?(:save) ? args[:save] : @save
+      klass  = args[:class] || @class
+      save   = args.has_key?(:save) ? args[:save] : @save
+      search = args.has_key?(:search) ? args[:search] : @search
 
-      Builder.new(klass, @attrs, @traits, save)
+      Builder.new(klass, @attrs, @traits, save, search)
     end
 
-    def initialize(klass, attrs = nil, traits = nil, save = false, &block)
+    def initialize(
+        klass,
+        attrs  = nil,
+        traits = nil,
+        save   = false,
+        search = false,
+        &block)
       @class  = klass
       @attrs  = attrs ? deep_copy(attrs) : []
       @traits = traits ? Module.new { include traits } : Module.new
       @save   = save
+      @search = search
 
       extend @traits
 
       instance_eval &block if block_given?
     end
 
-    def generate(parent = nil)
-      obj = initialize_object(parent)
+    def generate(opts = {})
+      parent = opts[:parent]
+      search = opts.has_key?(:search) ? opts[:search] : @search
+      obj    = initialize_object(parent)
 
-      obj = adapter.find(@class, obj) || obj if @search
+      obj = adapter.find(@class, obj) || obj if search
       save_object(obj)                       if @save
 
       obj
@@ -63,8 +73,7 @@ module Bricks
     end
 
     def method_missing(name, *args, &block)
-      attr = (return_object = name.to_s =~ /!$/) ? name.to_s.chop : name
-
+      attr   = (return_object = name.to_s =~ /[!?]$/) ? name.to_s.chop : name
       result = if respond_to?(attr)
                  send(attr, *args)
                elsif settable?(attr)
@@ -74,7 +83,10 @@ module Bricks
                end
 
       if return_object
-        generate
+        opts          = {:parent => @parent}
+        opts[:search] = name.to_s =~ /\?$/ || @search
+
+        generate opts
       else
         result
       end
@@ -108,7 +120,7 @@ module Bricks
               when Proc
                 v.call *[obj, parent].take([v.arity, 0].max)
               when Builder, BuilderSet
-                v.generate(obj)
+                v.generate(:parent => obj)
               else
                 v
               end

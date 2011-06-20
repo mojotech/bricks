@@ -85,6 +85,14 @@ describe Bricks do
     a.should be_saved
   end
 
+  it "fetches an existing model instead of initializing it" do
+    create!(Newspaper).should == build?(Newspaper)
+  end
+
+  it "fetches an existing model instead of creating it" do
+    create!(Newspaper).should == create?(Newspaper)
+  end
+
   describe "with simple fields" do
     it "initializes model fields" do
       a = build!(Article)
@@ -102,6 +110,12 @@ describe Bricks do
 
     it "uses the object being built in deferred initialization" do
       build!(Article).formatted_title.should == "a title by Jack Jupiter"
+    end
+
+    it "fetches an existing model instead of creating it" do
+      n = create(Newspaper).name!("The Bugle Planet")
+
+      create(Newspaper).name?("The Bugle Planet").should == n
     end
   end
 
