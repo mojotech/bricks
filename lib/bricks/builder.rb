@@ -130,8 +130,12 @@ module Bricks
 
       if block_given?
         pair[-1] = block
+
+        self
       elsif val
         pair[-1] = val
+
+        self
       elsif adapter.association?(@class, name, :one)
         pair[-1] = builder(adapter.association(@class, name).klass, @save)
       elsif adapter.association?(@class, name, :many)
