@@ -54,8 +54,8 @@ module Bricks
       search = opts.has_key?(:search) ? opts[:search] : @search
       obj    = initialize_object(parent)
 
-      obj = adapter.find(@class, obj) || obj if search
-      save_object(obj)                       if @save
+      obj  = adapter.find(@class, Hash[*@attrs.flatten]) || obj if search
+      save_object(obj)                                          if @save
 
       obj
     end

@@ -86,10 +86,14 @@ describe Bricks do
   end
 
   it "fetches an existing model instead of initializing it" do
+    create(Newspaper).name!("The First in Line")
+
     create!(Newspaper).should == build?(Newspaper)
   end
 
   it "fetches an existing model instead of creating it" do
+    create(Newspaper).name!("The First in Line")
+
     create!(Newspaper).should == create?(Newspaper)
   end
 
@@ -113,6 +117,8 @@ describe Bricks do
     end
 
     it "fetches an existing model instead of creating it" do
+      create!(Newspaper)
+
       n = create(Newspaper).name!("The Bugle Planet")
 
       create(Newspaper).name?("The Bugle Planet").should == n
