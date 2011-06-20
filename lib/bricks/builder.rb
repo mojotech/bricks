@@ -126,7 +126,8 @@ module Bricks
     def set(name, val = nil, &block)
       raise Bricks::BadSyntax, "Block and value given" if val && block_given?
 
-      pair = @attrs.assoc(name) || (@attrs << [name, nil]).last
+      nsym = name.to_sym
+      pair = @attrs.assoc(nsym) || (@attrs << [nsym, nil]).last
 
       if block_given?
         pair[-1] = block
@@ -136,10 +137,10 @@ module Bricks
         pair[-1] = val
 
         self
-      elsif adapter.association?(@class, name, :one)
-        pair[-1] = builder(adapter.association(@class, name).klass, @save)
-      elsif adapter.association?(@class, name, :many)
-        pair[-1] ||= BuilderSet.new(adapter.association(@class, name).klass)
+      elsif adapter.association?(@class, nsym, :one)
+        pair[-1] = builder(adapter.association(@class, nsym).klass, @save)
+      elsif adapter.association?(@class, nsym, :many)
+        pair[-1] ||= BuilderSet.new(adapter.association(@class, nsym).klass)
       else
         raise Bricks::BadSyntax,
               "No value or block given and not an association: #{name}."
