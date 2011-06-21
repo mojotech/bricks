@@ -197,6 +197,12 @@ describe Bricks do
         r.name
       }.should == %w(Tom Dick Harry)
     end
+
+    it "creates records with default attributes" do
+      a = create(Article).tap { |b| 2.times { b.readers.build } }.generate
+
+      a.should have(5).readers
+    end
   end
 
   describe "builder inheritance" do

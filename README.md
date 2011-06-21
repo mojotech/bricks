@@ -155,13 +155,22 @@ There is a slight difference between using `~` and `?`. `~` will permanently cha
 
 #### One-to-many, Many-to-many (has many, has and belongs to many)
 
-    Bricks do
-      builder Article do
-        # ...
+You can create several objects for a *-to-many association by calling the method `#build` on the association:
 
-        # readers association will have 3 records
-        %w(Tom Dick Harry).each { |r| readers.name(r) }
-      end
+    builder Article do
+      # readers association will have 3 records
+      3.times { readers.build }
+    end
+
+Upon generation, this will add 3 records with their attributes set to the defaults defined in the association class' builder. 
+
+If you want to further customize each builder in the association, you can omit the `#build` method call:
+
+    builder Article do
+      # ...
+
+      # readers association will have 3 records
+      %w(Tom Dick Harry).each { |r| readers.name(r) }
     end
 
 Each call to the *-to-many association name will add a new builder, which you can then further customize:
