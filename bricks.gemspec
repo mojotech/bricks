@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{bricks}
-  s.version = "0.3.0"
+  s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David Leal"]
-  s.date = %q{2011-06-17}
+  s.date = %q{2011-06-21}
   s.email = %q{david@mojotech.com}
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
     ".document",
     ".rspec",
     "Gemfile",
+    "History.md",
     "LICENSE.txt",
     "README.md",
     "Rakefile",
