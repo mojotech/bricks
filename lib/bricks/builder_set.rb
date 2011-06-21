@@ -4,11 +4,11 @@ module Bricks
   class BuilderSet
     include Bricks::DSL
 
-    def build(klass)
+    def build(klass = @class)
       (@builders << super).last
     end
 
-    def build!(klass)
+    def build!(klass = @class)
       (@builders << super).last
     end
 
@@ -16,11 +16,11 @@ module Bricks
       @builders.clear
     end
 
-    def create(klass)
+    def create(klass = @class)
       (@builders << super).last
     end
 
-    def create!(klass)
+    def create!(klass = @class)
       (@builders << super).last
     end
 
