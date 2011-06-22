@@ -1,6 +1,12 @@
 History
 =======
 
+0.4.1
+-----
+
+* You no longer need to place builders for classes used in associations before the builders for objects that declare those associations.
+* Fixed: you can now create builders for *-to-many associations using only the default attributes.
+
 0.4.0
 -----
 
