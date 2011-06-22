@@ -11,14 +11,6 @@ describe Bricks do
         start_date Date.new(1900, 1, 1)
       end
 
-      builder Newspaper do
-        name "The Daily Planet"
-
-        trait :daily_bugle do
-          name "The Daily Bugle"
-        end
-      end
-
       builder Article do
         author   'Jack Jupiter'
         title    'a title'
@@ -51,6 +43,14 @@ describe Bricks do
           readers.clear
 
           %w(Tom Dick Harry).each { |n| readers.name(n) }
+        end
+      end
+
+      builder Newspaper do
+        name "The Daily Planet"
+
+        trait :daily_bugle do
+          name "The Daily Bugle"
         end
       end
     end

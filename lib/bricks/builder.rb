@@ -24,6 +24,8 @@ module Bricks
     end
 
     def derive(args = {})
+      build_attrs
+
       klass  = args[:class] || @class
       save   = args.has_key?(:save) ? args[:save] : @save
       search = args.has_key?(:search) ? args[:search] : @search
@@ -43,10 +45,9 @@ module Bricks
       @traits = traits ? Module.new { include traits } : Module.new
       @save   = save
       @search = search
+      @block  = block
 
       extend @traits
-
-      instance_eval &block if block_given?
     end
 
     def generate(opts = {})
@@ -157,6 +158,10 @@ module Bricks
         raise Bricks::BadSyntax,
               "No value or block given and not an association: #{name}."
       end
+    end
+
+    def build_attrs
+      instance_eval &@block if @block && @attrs.empty?
     end
   end
 end
