@@ -88,7 +88,8 @@ module Bricks
                elsif settable?(attr)
                  set attr, *args, &block
                else
-                 raise Bricks::NoAttributeOrTrait, "Can't find `#{name}'."
+                 raise Bricks::NoAttributeOrTrait,
+                       "Can't find `#{name}' on builder for #{@class}."
                end
 
       if return_object
