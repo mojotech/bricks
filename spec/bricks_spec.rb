@@ -44,6 +44,10 @@ describe Bricks do
 
           %w(Tom Dick Harry).each { |n| readers.name(n) }
         end
+
+        after :clone do
+          popularity (1..100).to_a[rand(100)]
+        end
       end
 
       builder Newspaper do
@@ -215,6 +219,16 @@ describe Bricks do
 
     it "creates a builder for models that don't have one" do
       build!(Reader).should be_a(Reader)
+    end
+  end
+
+  describe "hooks" do
+    it "executes the `generate' hook after a builder is cloned" do
+      build!(Article).popularity.should_not == build!(Article).popularity
+    end
+
+    it "it does not override values set after the builder is cloned" do
+      build(Article).popularity!(50).popularity.should == 50
     end
   end
 end

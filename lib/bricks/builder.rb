@@ -23,6 +23,12 @@ module Bricks
       self
     end
 
+    def after(hook, &block)
+      @traits.class_eval do
+        define_method "__after_#{hook}", &block
+      end
+    end
+
     def derive(args = {})
       build_attrs
 
@@ -30,7 +36,9 @@ module Bricks
       save   = args.has_key?(:save) ? args[:save] : @save
       search = args.has_key?(:search) ? args[:search] : @search
 
-      Builder.new(klass, @attrs, @traits, save, search)
+      Builder.new(klass, @attrs, @traits, save, search).tap { |b|
+        b.run_hook :after, :clone if ! args[:class]
+      }
     end
 
     def initialize(
@@ -91,6 +99,14 @@ module Bricks
       else
         result
       end
+    end
+
+    protected
+
+    def run_hook(position, name)
+      full_name = "__#{position}_#{name}"
+
+      send full_name if respond_to?(full_name)
     end
 
     private

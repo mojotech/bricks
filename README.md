@@ -18,6 +18,7 @@ We'll use the following domain to describe *Brick's* features:
     #  title           :string(255)
     #  author          :string(255)
     #  formatted_title :string(510)
+    #  popularity      :integer(4)
     #  publication_id  :integer(4)
     #
     class Article < ActiveRecord::Base
@@ -243,6 +244,30 @@ Note that if you want to override a *-to-many association inside a trait, you ne
     end
 
 For an executable version of this documentation, please see spec/bricks_spec.rb.
+
+### Hooks
+
+*Bricks includes a simple, general hook framework. It allows you to do something like this:
+
+    builder Article
+      # ...
+
+      trait :on_the_bugle do
+        publication.name "The Daily Bugle"
+        popularity       75
+      end
+
+      trait :on_the_planet do
+        publication.name "The Daily Planet"
+        popularity       85
+      end
+
+      after :clone do
+        send %w(on_the_bugle on_the_planet)[rand(2)]
+      end
+    end
+
+*Bricks* supports a single hook right now: after(:clone). It will be executed whenever you use any of #build, #build!, #create or #create!, right before you start customizing the resulting builder on your test.
 
 Installation
 ------------

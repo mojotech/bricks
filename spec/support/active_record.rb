@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(:version => 20110608204150) do
     t.string   "language"
     t.integer  "newspaper_id"
     t.string   "title"
+    t.integer  "popularity"
   end
 
   create_table "newspapers", :force => true do |t|

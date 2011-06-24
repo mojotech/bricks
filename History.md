@@ -1,6 +1,11 @@
 History
 =======
 
+0.5.0
+-----
+
+* Now includes generalized hook framework, but only supports after(:clone) hook.
+
 0.4.1
 -----
 
