@@ -130,23 +130,53 @@ module Bricks
       obj.save!
     end
 
-    def initialize_object(parent)
-      obj = @class.new
+    class Proxy
+      attr_reader :obj
 
-      @attrs.each { |(k, v)|
-        val = case v
+      def initialize(obj, attrs, parent)
+        @obj       = obj
+        @attrs_in  = attrs.dup
+        @attrs_out = {}
+        @parent    = parent
+      end
+
+      def method_missing(name, *args)
+        name_y = name.to_sym
+
+        if @attrs_in.assoc(name_y) && ! @attrs_out.has_key?(name_y)
+          fix_attr name
+        else
+          @obj.send name, *args
+        end
+      end
+
+      def build
+        @attrs_in.each { |(k, _)| send k }
+
+        @obj
+      end
+
+      def fix_attr(name)
+        val = case v = @attrs_in.assoc(name).last
               when Proc
-                v.call *[obj, parent].take([v.arity, 0].max)
+                case r = v.call(*[self, @parent].take([v.arity, 0].max))
+                when Proxy
+                  r.obj
+                else
+                  r
+                end
               when Builder, BuilderSet
-                v.generate(:parent => obj)
+                v.generate(:parent => self)
               else
                 v
               end
 
-        obj.send "#{k}=", val
-      }
+        @attrs_out[name] = @obj.send("#{name}=", val)
+      end
+    end
 
-      obj
+    def initialize_object(parent)
+      Proxy.new(@class.new, @attrs, parent).build
     end
 
     def settable?(name)

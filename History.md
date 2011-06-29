@@ -5,6 +5,7 @@ History
 -----
 
 * Now includes generalized hook framework, but only supports after(:clone) hook.
+* Ask for an attribute that hasn't been initialized yet, and it will be.
 
 0.4.1
 -----

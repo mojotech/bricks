@@ -11,7 +11,7 @@ describe Bricks::Builder do
     }.new
 
     class Person
-      attr_accessor :name
+      attr_accessor :name, :first_name, :last_name
     end
   end
 
@@ -37,5 +37,20 @@ describe Bricks::Builder do
     b = Bricks::Builder.new(Person)
 
     b.generate.object_id.should_not == b.generate.object_id
+  end
+
+  describe "attribute evaluation ordering" do
+    before :all do
+    end
+
+    it "doesn't care which order the attributes are declared" do
+      b = Bricks::Builder.new Person do
+        name { |obj| obj.first_name + " " + obj.last_name }
+        first_name { "Jack" }
+        last_name { "Black" }
+      end
+
+      b.derive.generate.name.should == "Jack Black"
+    end
   end
 end
