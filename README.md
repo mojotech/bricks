@@ -265,9 +265,17 @@ For an executable version of this documentation, please see spec/bricks_spec.rb.
       after :clone do
         send %w(on_the_bugle on_the_planet)[rand(2)]
       end
+
+      before :save do
+        active true
+      end
     end
 
-*Bricks* supports a single hook right now: after(:clone). It will be executed whenever you use any of #build, #build!, #create or #create!, right before you start customizing the resulting builder on your test.
+*Bricks* supports only two hooks right now: after(:clone) and before(:save).
+
+The after(:clone) hook will be executed whenever you use any of #build, #build!, #create or #create!, right before you start customizing the resulting builder on your test.
+
+On the other hand, the before(:save) hook will be executed only for #create and #create!.
 
 Installation
 ------------

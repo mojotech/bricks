@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(:version => 20110608204150) do
     t.integer  "newspaper_id"
     t.string   "title"
     t.integer  "popularity"
+    t.boolean  "active"
   end
 
   create_table "newspapers", :force => true do |t|

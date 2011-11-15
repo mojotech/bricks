@@ -27,6 +27,10 @@ module Bricks
       define_hook :after, hook, &block
     end
 
+    def before(hook, &block)
+      define_hook :before, hook, &block
+    end
+
     def derive(args = {})
       build_attrs
 
@@ -59,8 +63,10 @@ module Bricks
     def generate(opts = {})
       parent = opts[:parent]
       search = opts.has_key?(:search) ? opts[:search] : @search
-      obj    = initialize_object(parent)
 
+      run_hook :before, :save if @save
+
+      obj  = initialize_object(parent)
       obj  = adapter.find(@class, Hash[*@attrs.flatten]) || obj if search
       save_object(obj)                                          if @save
 
