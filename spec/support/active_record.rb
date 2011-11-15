@@ -8,6 +8,8 @@ ActiveRecord::Base.establish_connection(
   :database => ":memory:"
  )
 
+ActiveRecord::Migration.verbose = false
+
 ActiveRecord::Schema.define(:version => 20110608204150) do
   create_table "articles", :force => true do |t|
     t.string   "author"
