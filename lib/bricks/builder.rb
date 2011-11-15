@@ -24,9 +24,7 @@ module Bricks
     end
 
     def after(hook, &block)
-      @traits.class_eval do
-        define_method "__after_#{hook}", &block
-      end
+      define_hook :after, hook, &block
     end
 
     def derive(args = {})
@@ -103,6 +101,12 @@ module Bricks
     end
 
     protected
+
+    def define_hook(position, name, &block)
+      @traits.class_eval do
+        define_method "__#{position}_#{name}", &block
+      end
+    end
 
     def run_hook(position, name)
       full_name = "__#{position}_#{name}"
