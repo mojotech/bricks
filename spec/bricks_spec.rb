@@ -48,6 +48,10 @@ describe Bricks do
         after :clone do
           popularity (1..100).to_a[rand(100)]
         end
+
+        before :save do
+          active true
+        end
       end
 
       builder Newspaper do
@@ -225,6 +229,10 @@ describe Bricks do
   describe "hooks" do
     it "executes the `generate' hook after a builder is cloned" do
       build!(Article).popularity.should_not == build!(Article).popularity
+    end
+
+    it "executes the `create' hook before an object is saved" do
+      create!(Article).active.should be_true
     end
 
     it "it does not override values set after the builder is cloned" do
