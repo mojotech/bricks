@@ -40,6 +40,8 @@ class Article < ActiveRecord::Base
   belongs_to :newspaper
   has_many   :readers
 
+  validates_presence_of :newspaper_id
+
   def saved?
     ! new_record?
   end

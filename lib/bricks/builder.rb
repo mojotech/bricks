@@ -30,13 +30,12 @@ module Bricks
     end
 
     def derive(args = {})
-      build_attrs
-
       klass  = args[:class] || @class
       save   = args.has_key?(:save) ? args[:save] : @save
       search = args.has_key?(:search) ? args[:search] : @search
 
-      Builder.new(klass, @attrs, @traits, save, search).tap { |b|
+      Builder.new(klass, @attrs, @traits, save, search, &@block).tap { |b|
+        b.send :build_attrs
         b.run_hook :after, :clone if ! args[:class]
       }
     end
