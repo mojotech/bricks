@@ -10,8 +10,8 @@ module Bricks
         def initialize(klass, kind)
           @class = klass
           @type  = case kind
-                   when :belongs_to;                         :one
-                   when :has_many, :has_and_belongs_to_many; :many
+                   when :belongs_to;                         :parent
+                   when :has_many, :has_and_belongs_to_many; :children
                    else "Unknown AR association type: #{kind}."
                    end
         end

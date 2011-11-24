@@ -197,9 +197,9 @@ module Bricks
         pair[-1] = val
 
         self
-      elsif adapter.association?(@class, nsym, :one)
+      elsif adapter.association?(@class, nsym, :parent)
         pair[-1] = builder(adapter.association(@class, nsym).klass, @save)
-      elsif adapter.association?(@class, nsym, :many)
+      elsif adapter.association?(@class, nsym, :children)
         pair[-1] ||= BuilderSet.new(adapter.association(@class, nsym).klass)
       else
         raise Bricks::BadSyntax,
