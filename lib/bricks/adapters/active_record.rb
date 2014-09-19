@@ -34,7 +34,7 @@ module Bricks
       end
 
       def find(klass, attrs)
-        klass.find(:first, :conditions => attrs)
+        klass.find(:first, conditions: attrs)
       end
 
       Bricks::Builder.adapter = self.new

@@ -96,7 +96,7 @@ module Bricks
                end
 
       if return_object
-        opts          = {:parent => @parent}
+        opts          = {parent: @parent}
         opts[:search] = name.to_s =~ /\?$/ || @search
 
         generate opts
@@ -175,7 +175,7 @@ module Bricks
                   r
                 end
               when Builder, BuilderSet
-                v.generate(:parent => self)
+                v.generate(parent: self)
               else
                 v
               end

@@ -23,7 +23,7 @@ module Bricks
         @builders[key]
       elsif Class === key
         @builders[key] = if builder = @builders[key.superclass]
-                           builder.derive(:class => key)
+                           builder.derive(class: key)
                          else
                            builder(key)
                          end

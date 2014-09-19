@@ -4,14 +4,14 @@ require 'benchmark'
 require 'bricks/adapters/active_record'
 
 ActiveRecord::Base.establish_connection(
-  :adapter => 'sqlite3',
-  :database => ':memory:'
+  adapter: 'sqlite3',
+  database: ':memory:'
  )
 
 ActiveRecord::Migration.verbose = false
 
-ActiveRecord::Schema.define(:version => 20_110_608_204_150) do
-  create_table 'articles', :force => true do |t|
+ActiveRecord::Schema.define(version: 20_110_608_204_150) do
+  create_table 'articles', force: true do |t|
     t.string   'author'
     t.string   'body'
     t.datetime 'deferred'
@@ -23,17 +23,17 @@ ActiveRecord::Schema.define(:version => 20_110_608_204_150) do
     t.boolean  'active'
   end
 
-  create_table 'newspapers', :force => true do |t|
+  create_table 'newspapers', force: true do |t|
     t.string   'language'
     t.string   'name'
   end
 
-  create_table 'print_media', :force => true do |t|
+  create_table 'print_media', force: true do |t|
     t.date     'start_date'
     t.string   'type'
   end
 
-  create_table 'readers', :force => true do |t|
+  create_table 'readers', force: true do |t|
     t.integer  'article_id'
     t.string   'name'
   end
