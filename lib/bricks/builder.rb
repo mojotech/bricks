@@ -17,7 +17,7 @@ module Bricks
       @@instances ||= {}
     end
 
-    def ~@()
+    def ~@
       @search = true
 
       self
