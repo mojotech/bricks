@@ -17,18 +17,18 @@ describe Bricks do
         body     'the body'
         language 'Swahili'
 
-        formatted_title { |obj| obj.title + " by " + obj.author }
+        formatted_title { |obj| obj.title + ' by ' + obj.author }
         deferred { Time.now }
         newspaper.language { |_, article| article.language }
 
         %w(Socrates Plato Aristotle).each { |n| readers.name(n) }
 
         trait :in_english do
-          language "English"
+          language 'English'
         end
 
         trait :by_jove do
-          author "Jack Jupiter"
+          author 'Jack Jupiter'
         end
 
         trait :maybe_bugle do
@@ -55,10 +55,10 @@ describe Bricks do
       end
 
       builder Newspaper do
-        name "The Daily Planet"
+        name 'The Daily Planet'
 
         trait :daily_bugle do
-          name "The Daily Bugle"
+          name 'The Daily Bugle'
         end
       end
     end
@@ -71,149 +71,147 @@ describe Bricks do
     Newspaper.delete_all
   end
 
-  it "#build returns the constructor" do
+  it '#build returns the constructor' do
     build(Article).should be_kind_of(Bricks::Builder)
   end
 
-  it "#create returns the constructor" do
+  it '#create returns the constructor' do
     create(Article).should be_kind_of(Bricks::Builder)
   end
 
-  it "initializes a model" do
+  it 'initializes a model' do
     a = build!(Article)
 
     a.should be_instance_of(Article)
     a.should be_new_record
   end
 
-  it "creates a model" do
+  it 'creates a model' do
     a = create!(Article)
 
     a.should be_instance_of(Article)
     a.should be_saved
   end
 
-  it "fetches an existing model instead of initializing it" do
-    create(Newspaper).name!("The First in Line")
+  it 'fetches an existing model instead of initializing it' do
+    create(Newspaper).name!('The First in Line')
 
     create!(Newspaper).should == build?(Newspaper)
   end
 
-  it "fetches an existing model instead of creating it" do
-    create(Newspaper).name!("The First in Line")
+  it 'fetches an existing model instead of creating it' do
+    create(Newspaper).name!('The First in Line')
 
     create!(Newspaper).should == create?(Newspaper)
   end
 
-  describe "with simple fields" do
-    it "initializes model fields" do
+  describe 'with simple fields' do
+    it 'initializes model fields' do
       a = build!(Article)
 
       a.title.should == 'a title'
       a.body.should  == 'the body'
     end
 
-    it "defers field initialization" do
+    it 'defers field initialization' do
       time = Time.now
       a    = build!(Article)
 
       a.deferred.should > time
     end
 
-    it "uses the object being built in deferred initialization" do
-      build!(Article).formatted_title.should == "a title by Jack Jupiter"
+    it 'uses the object being built in deferred initialization' do
+      build!(Article).formatted_title.should == 'a title by Jack Jupiter'
     end
 
-    it "fetches an existing model instead of creating it" do
+    it 'fetches an existing model instead of creating it' do
       create!(Newspaper)
 
-      n = create(Newspaper).name!("The Bugle Planet")
+      n = create(Newspaper).name!('The Bugle Planet')
 
-      create(Newspaper).name?("The Bugle Planet").should == n
+      create(Newspaper).name?('The Bugle Planet').should == n
     end
   end
 
-  describe "with traits" do
-    it "returns the builder after calling the trait" do
+  describe 'with traits' do
+    it 'returns the builder after calling the trait' do
       build(Article).in_english.should be_kind_of(Bricks::Builder)
     end
 
-    it "#build returns the object if the trait is called with a bang" do
+    it '#build returns the object if the trait is called with a bang' do
       a = build(Article).in_english!
 
       a.should be_kind_of(Article)
       a.should be_new_record
     end
 
-    it "#create creates the object if the trait is called with a bang" do
+    it '#create creates the object if the trait is called with a bang' do
       a = create(Article).in_english!
 
       a.should be_kind_of(Article)
       a.should be_saved
     end
 
-    it "initializes the model fields" do
-      build(Article).in_english!.language.should == "English"
+    it 'initializes the model fields' do
+      build(Article).in_english!.language.should == 'English'
     end
 
-    it "combines multiple traits" do
+    it 'combines multiple traits' do
       a = build(Article).in_english.by_jove!
 
-      a.language.should == "English"
-      a.author.should   == "Jack Jupiter"
+      a.language.should == 'English'
+      a.author.should   == 'Jack Jupiter'
     end
   end
 
-  describe "with a many-to-one association" do
-    it "initializes an association with the default values" do
+  describe 'with a many-to-one association' do
+    it 'initializes an association with the default values' do
       build!(Article).newspaper.name.should == 'The Daily Planet'
     end
 
-    it "overrides the association" do
+    it 'overrides the association' do
       build(Article).on_the_bugle!.newspaper.name.
         should == 'The Daily Bugle'
     end
 
-    it "passes the parent into a deferred block" do
-      build(Article).language!("Thai").newspaper.language.should == "Thai"
+    it 'passes the parent into a deferred block' do
+      build(Article).language!('Thai').newspaper.language.should == 'Thai'
     end
 
-    it "possibly looks for an existing record" do
+    it 'possibly looks for an existing record' do
       n = create(Newspaper).daily_bugle!
       a = create(Article).maybe_bugle!
 
       a.newspaper.should == n
     end
 
-    it "possibly looks for an existing record (and finds none)" do
+    it 'possibly looks for an existing record (and finds none)' do
       a = create(Article).maybe_bugle!
 
       a.newspaper.should_not be_new_record
-      a.newspaper.name.should == "The Daily Bugle"
+      a.newspaper.name.should == 'The Daily Bugle'
     end
   end
 
-  describe "with a one-to-many association" do
-    it "initializes an association with the default values" do
-      build!(Article).readers.map { |r|
-        r.name
-      }.should == %w(Socrates Plato Aristotle)
+  describe 'with a one-to-many association' do
+    it 'initializes an association with the default values' do
+      build!(Article).readers.map(&:name
+).should == %w(Socrates Plato Aristotle)
     end
 
-    it "overrides the association" do
-      build(Article).with_alternative_readers!.readers.map { |r|
-        r.name
-      }.should == %w(Tom Dick Harry)
+    it 'overrides the association' do
+      build(Article).with_alternative_readers!.readers.map(&:name
+).should == %w(Tom Dick Harry)
     end
 
-    it "creates records with default attributes" do
+    it 'creates records with default attributes' do
       a = create(Article).tap { |b| 2.times { b.readers.build } }.generate
 
       a.should have(5).readers
     end
   end
 
-  describe "builder inheritance" do
+  describe 'builder inheritance' do
     it "uses the parent's builder if the model has none" do
       mag = build!(Magazine)
 
@@ -226,7 +224,7 @@ describe Bricks do
     end
   end
 
-  describe "hooks" do
+  describe 'hooks' do
     it "executes the `generate' hook after a builder is cloned" do
       build!(Article).popularity.should_not == build!(Article).popularity
     end
@@ -235,7 +233,7 @@ describe Bricks do
       create!(Article).active.should be_true
     end
 
-    it "it does not override values set after the builder is cloned" do
+    it 'it does not override values set after the builder is cloned' do
       build(Article).popularity!(50).popularity.should == 50
     end
   end

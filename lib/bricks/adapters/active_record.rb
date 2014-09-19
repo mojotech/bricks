@@ -10,8 +10,8 @@ module Bricks
         def initialize(klass, kind)
           @class = klass
           @type  = case kind
-                   when :belongs_to;                         :parent
-                   when :has_many, :has_and_belongs_to_many; :children
+                   when :belongs_to then                         :parent
+                   when :has_many, :has_and_belongs_to_many then :children
                    else "Unknown AR association type: #{kind}."
                    end
         end
@@ -34,7 +34,7 @@ module Bricks
       end
 
       def find(klass, attrs)
-        klass.find(:first, :conditions => attrs)
+        klass.find(:first, conditions: attrs)
       end
 
       Bricks::Builder.adapter = self.new

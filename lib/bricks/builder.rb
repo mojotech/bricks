@@ -17,7 +17,7 @@ module Bricks
       @@instances ||= {}
     end
 
-    def ~@()
+    def ~@
       @search = true
 
       self
@@ -36,10 +36,10 @@ module Bricks
       save   = args.has_key?(:save) ? args[:save] : @save
       search = args.has_key?(:search) ? args[:search] : @search
 
-      Builder.new(klass, @attrs, @traits, save, search, &@block).tap { |b|
+      Builder.new(klass, @attrs, @traits, save, search, &@block).tap do |b|
         b.send :build_attrs
         b.run_hook :after, :clone if ! args[:class]
-      }
+      end
     end
 
     def initialize(
@@ -96,7 +96,7 @@ module Bricks
                end
 
       if return_object
-        opts          = {:parent => @parent}
+        opts          = {parent: @parent}
         opts[:search] = name.to_s =~ /\?$/ || @search
 
         generate opts
@@ -130,9 +130,9 @@ module Bricks
     end
 
     def deep_copy(attrs)
-      attrs.inject([]) { |a, (k, v)|
+      attrs.reduce([]) do |a, (k, v)|
         a.tap { a << [k, Builder === v ? v.derive : v] }
-      }
+      end
     end
 
     def save_object(obj)
@@ -175,7 +175,7 @@ module Bricks
                   r
                 end
               when Builder, BuilderSet
-                v.generate(:parent => self)
+                v.generate(parent: self)
               else
                 v
               end
@@ -193,7 +193,7 @@ module Bricks
     end
 
     def set(name, val = nil, &block)
-      raise Bricks::BadSyntax, "Block and value given" if val && block_given?
+      raise Bricks::BadSyntax, 'Block and value given' if val && block_given?
 
       nsym = name.to_sym
       pair = @attrs.assoc(nsym) || (@attrs << [nsym, nil]).last

@@ -9,7 +9,7 @@ module Bricks
     end
 
     def build?(klass)
-      build(klass).generate(:search => true)
+      build(klass).generate(search: true)
     end
 
     def create(klass)
@@ -21,11 +21,11 @@ module Bricks
     end
 
     def create?(klass)
-      create(klass).generate(:search => true)
+      create(klass).generate(search: true)
     end
 
     def builder(klass, save)
-      Bricks.builders[klass].derive(:save => save)
+      Bricks.builders[klass].derive(save: save)
     end
   end
 end
