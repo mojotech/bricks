@@ -36,10 +36,10 @@ module Bricks
       save   = args.has_key?(:save) ? args[:save] : @save
       search = args.has_key?(:search) ? args[:search] : @search
 
-      Builder.new(klass, @attrs, @traits, save, search, &@block).tap { |b|
+      Builder.new(klass, @attrs, @traits, save, search, &@block).tap do |b|
         b.send :build_attrs
         b.run_hook :after, :clone if ! args[:class]
-      }
+      end
     end
 
     def initialize(
@@ -130,9 +130,9 @@ module Bricks
     end
 
     def deep_copy(attrs)
-      attrs.inject([]) { |a, (k, v)|
+      attrs.inject([]) do |a, (k, v)|
         a.tap { a << [k, Builder === v ? v.derive : v] }
-      }
+      end
     end
 
     def save_object(obj)
