@@ -130,7 +130,7 @@ module Bricks
     end
 
     def deep_copy(attrs)
-      attrs.inject([]) do |a, (k, v)|
+      attrs.reduce([]) do |a, (k, v)|
         a.tap { a << [k, Builder === v ? v.derive : v] }
       end
     end
