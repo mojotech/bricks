@@ -45,10 +45,10 @@ describe Bricks::Builder do
 
     it "doesn't care which order the attributes are declared" do
       b = Bricks::Builder.new Person do
-        name { |obj| obj.first_name + ' ' + obj.last_name }
-        first_name { 'Jack' }
-        last_name { 'Black' }
-      end
+            name { |obj| obj.first_name + ' ' + obj.last_name }
+            first_name { 'Jack' }
+            last_name { 'Black' }
+          end
 
       b.derive.generate.name.should == 'Jack Black'
     end
