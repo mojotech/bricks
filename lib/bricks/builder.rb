@@ -193,7 +193,7 @@ module Bricks
     end
 
     def set(name, val = nil, &block)
-      raise Bricks::BadSyntax, "Block and value given" if val && block_given?
+      raise Bricks::BadSyntax, 'Block and value given' if val && block_given?
 
       nsym = name.to_sym
       pair = @attrs.assoc(nsym) || (@attrs << [nsym, nil]).last
