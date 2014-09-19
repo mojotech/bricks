@@ -10,7 +10,7 @@ ActiveRecord::Base.establish_connection(
 
 ActiveRecord::Migration.verbose = false
 
-ActiveRecord::Schema.define(:version => 20110608204150) do
+ActiveRecord::Schema.define(:version => 20_110_608_204_150) do
   create_table 'articles', :force => true do |t|
     t.string   'author'
     t.string   'body'
