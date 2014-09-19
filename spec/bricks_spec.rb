@@ -195,15 +195,13 @@ describe Bricks do
 
   describe "with a one-to-many association" do
     it "initializes an association with the default values" do
-      build!(Article).readers.map { |r|
-        r.name
-      }.should == %w(Socrates Plato Aristotle)
+      build!(Article).readers.map(&:name
+).should == %w(Socrates Plato Aristotle)
     end
 
     it "overrides the association" do
-      build(Article).with_alternative_readers!.readers.map { |r|
-        r.name
-      }.should == %w(Tom Dick Harry)
+      build(Article).with_alternative_readers!.readers.map(&:name
+).should == %w(Tom Dick Harry)
     end
 
     it "creates records with default attributes" do
